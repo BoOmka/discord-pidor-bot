@@ -1,7 +1,7 @@
 version: '3.2'
 services:
-  bot:
-    container_name: bot
+  discord_gay_detector:
+    container_name: discord_gay_detector
     restart: unless-stopped
     build: .
     volumes:
