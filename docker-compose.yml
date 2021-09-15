@@ -1,0 +1,16 @@
+version: '3.2'
+services:
+  bot:
+    container_name: bot
+    restart: unless-stopped
+    build: .
+    volumes:
+      - type: bind
+        source: /srv/discord-gay-detector/database.db3
+        target: /app/database.db3
+      - type: bind
+        source: /srv/discord-gay-detector/.env
+        target: /app/.env
+      - type: bind
+        source: /srv/discord-gay-detector/bot.log
+        target: /app/bot.log
