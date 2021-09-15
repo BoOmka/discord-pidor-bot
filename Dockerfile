@@ -5,4 +5,4 @@ WORKDIR /app
 
 RUN npm install
 
-ENTRYPOINT [ "npm run" ]
+ENTRYPOINT [ "npm", "run" ]
