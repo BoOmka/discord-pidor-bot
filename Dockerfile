@@ -4,5 +4,6 @@ COPY . /app
 WORKDIR /app
 
 RUN npm install
+RUN node install.js
 
-ENTRYPOINT [ "npm", "run" ]
+ENTRYPOINT [ "node", "run.js" ]
