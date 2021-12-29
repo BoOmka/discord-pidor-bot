@@ -34,4 +34,38 @@ let game = new Game(adapter, repository, gamesRepository);
 
 // game.CanStartGame(123).then(r => console.log(r)).catch(reject => console.log(reject));
 
-game.run("644645112692867073").then(r => console.log(r)).catch(r => console.log(r));
+game.Run("644645112692867073").then(r => console.log(r)).catch(r => console.log(r));
+
+let now = new Date(2021, 1, 2, 14, 30, 0);
+let prev = gameWithDate(2021, 1, 1, 14, 29, 59);
+
+function gameWithDate(year, month, date, hours, minutes, seconds) {
+    let dt = new Date(year, month, date, hours, minutes, seconds);
+    return {
+        datetime: Math.floor(dt / 1000)
+    }
+}
+
+test('can start first game', () => {
+    expect(game.canStartGame(null, now)).toBe(true);
+})
+
+test('24 hours passed', () => {
+    expect(game.canStartGame(prev, now)).toBe(true);
+})
+
+test('next day before 9am', () => {
+    let now = new Date(2021, 1, 2, 8, 59, 59);
+    expect(game.canStartGame(prev, now)).toBe(false);
+})
+
+test('next day after 9am', () => {
+    let now = new Date(2021, 1, 2, 9, 0, 1);
+    expect(game.canStartGame(prev, now)).toBe(true);
+})
+
+test('same day', () => {
+    let prev = gameWithDate(2021, 1, 2, 1, 0, 1);
+    let now = new Date(2021, 1, 2, 10, 0, 1);
+    expect(game.canStartGame(prev, now)).toBe(false);
+})

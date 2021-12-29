@@ -55,14 +55,15 @@ class Game {
                 .then(game => {
                     if (game === undefined) {
                         resolve(true);
-                    }
-
-                    if (game.datetime > Math.floor(Date.now() / 1000) - 86400) {
-                        reject(game.discord_user_name);
                         return;
                     }
 
-                    resolve(true);
+                    if (this.canStartGame(game, Date.now())) {
+                        resolve(true);
+                        return;
+                    }
+
+                    reject(game.discord_user_name);
                 });
         });
     }
@@ -87,7 +88,7 @@ class Game {
 
                 this.gamesRepository.SaveGameInformation(guild_id, participant.id);
                 this.participantRepository.ScoreParticipant(participant.id);
-                resolve(Misc.GetRandomElement(resultPhrases) + "<@" + participant.discord_user_id+">");
+                resolve(Misc.GetRandomElement(resultPhrases) + "<@" + participant.discord_user_id + ">");
             });
         });
     }
@@ -103,12 +104,23 @@ class Game {
                 .then(rows => {
                     let string = "**Топ-10 пидоров за все время:**\n";
                     rows.forEach((row) => {
-                        string += row.discord_user_name+" - " + row.score + "\n";
+                        string += row.discord_user_name + " - " + row.score + "\n";
                     });
 
                     resolve(string);
                 });
         });
+    }
+
+    canStartGame(prev_game, now) {
+        if (prev_game == null)
+            return true;
+
+        if (prev_game.datetime <= Math.floor(now / 1000) - 86400)
+            return true;
+
+        let prevGameDate = new Date(prev_game.datetime * 1000);
+        return prevGameDate.getDate() !== now.getDate() && now.getHours() >= 9;
     }
 }
 
