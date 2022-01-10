@@ -58,7 +58,7 @@ class Game {
                         return;
                     }
 
-                    if (this.canStartGame(game, Date.now())) {
+                    if (this.canStartGame(game, new Date())) {
                         resolve(true);
                         return;
                     }
@@ -116,7 +116,7 @@ class Game {
         if (prev_game == null)
             return true;
 
-        if (prev_game.datetime <= Math.floor(now / 1000) - 86400)
+        if (prev_game.datetime <= Math.floor(now.getTime() / 1000) - 86400)
             return true;
 
         let prevGameDate = new Date(prev_game.datetime * 1000);
